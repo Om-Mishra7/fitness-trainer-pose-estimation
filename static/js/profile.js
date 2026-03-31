@@ -297,7 +297,7 @@ function showNotification(message, type = 'success') {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.innerHTML = `
-        <span>${type === 'success' ? '✓' : '⚠️'}</span>
+        <span>${type === 'success' ? 'OK' : 'Warning'}</span>
         <span>${message}</span>
     `;
     

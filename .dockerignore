@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.pyo
+.git/
+uploads/
+*.task
+pose_landmarker_*.task

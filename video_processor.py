@@ -221,7 +221,26 @@ def draw_stats_overlay(frame, stats):
 def process_video(video_path: str, exercise_type: str, output_json_path: str, output_video_path: str = None):
     """Process video, draw skeleton, and write results"""
     import mediapipe as mp
+    from mediapipe.tasks.python.core.base_options import BaseOptions
+    from mediapipe.tasks.python.vision.pose_landmarker import PoseLandmarker, PoseLandmarkerOptions
+    from mediapipe.tasks.python.vision.core.vision_task_running_mode import VisionTaskRunningMode
     from exercises.engine import ExerciseEngine
+
+    _model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'pose_landmarker_full.task')
+    _model_url = (
+        'https://storage.googleapis.com/mediapipe-models/'
+        'pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task'
+    )
+    if not os.path.exists(_model_path):
+        import urllib.request
+        print(f'Downloading pose landmarker model to {_model_path} ...')
+        urllib.request.urlretrieve(_model_url, _model_path)
+        print('Model downloaded.')
+
+    class _LandmarkContainer:
+        __slots__ = ('landmark',)
+        def __init__(self, lm_list):
+            self.landmark = lm_list
     
     results = {
         'status': 'processing',
@@ -318,17 +337,15 @@ def process_video(video_path: str, exercise_type: str, output_json_path: str, ou
             results['output_video'] = output_video_path
             print(f"Output video: {output_video_path}")
         
-        # Initialize MediaPipe
-        mp_pose = mp.solutions.pose
-        mp_drawing = mp.solutions.drawing_utils
-        
-        pose = mp_pose.Pose(
-            static_image_mode=False,  # Video mode for better tracking
-            model_complexity=1,  # Better accuracy
-            enable_segmentation=False,
-            min_detection_confidence=0.5,
-            min_tracking_confidence=0.5
+        # Initialize MediaPipe (new Tasks API)
+        _pose_options = PoseLandmarkerOptions(
+            base_options=BaseOptions(model_asset_path=_model_path),
+            running_mode=VisionTaskRunningMode.VIDEO,
+            min_pose_detection_confidence=0.6,
+            min_pose_presence_confidence=0.6,
+            min_tracking_confidence=0.6,
         )
+        pose = PoseLandmarker.create_from_options(_pose_options)
         print("MediaPipe Pose initialized")
         
         # Initialize exercise engine
@@ -339,7 +356,7 @@ def process_video(video_path: str, exercise_type: str, output_json_path: str, ou
             print(f"Exercise loaded: {exercise_type}")
         
         frame_count = 0
-        analyze_skip = max(1, int(fps / 8))  # Analyze at ~8 fps
+        analyze_skip = max(1, int(fps / 15))  # Analyze at ~15 fps for better accuracy
         print(f"Analyze skip: {analyze_skip} (analyzing at ~{fps/analyze_skip:.1f} fps)")
         
         # Current stats for overlay
@@ -359,22 +376,20 @@ def process_video(video_path: str, exercise_type: str, output_json_path: str, ou
             frame_count += 1
             results['progress'] = int((frame_count / total_frames) * 100)
             
-            # Process with MediaPipe
+            # Process with MediaPipe (new Tasks API)
             rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            pose_results = pose.process(rgb_frame)
-            
-            if pose_results.pose_landmarks:
+            mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_frame)
+            timestamp_ms = int(frame_count * 1000 / fps)
+            _raw = pose.detect_for_video(mp_image, timestamp_ms)
+            _landmarks = _LandmarkContainer(_raw.pose_landmarks[0]) if _raw.pose_landmarks else None
+
+            if _landmarks:
                 # Draw skeleton on frame
-                frame = draw_skeleton(frame, pose_results.pose_landmarks, mp_pose, mp_drawing)
-                
+                frame = draw_skeleton(frame, _landmarks, None, None)
+
                 # Analyze exercise periodically
                 if frame_count % analyze_skip == 0:
-                    class SimpleResults:
-                        def __init__(self, landmarks):
-                            self.pose_landmarks = landmarks
-                    
-                    # Pass landmarks.landmark (the actual list) to engine
-                    engine.process_frame(frame, pose_results.pose_landmarks.landmark)
+                    engine.process_frame(frame, _landmarks.landmark)
                     status = engine.get_status()
                     
                     current_stats['reps'] = status.get('counter', 0)

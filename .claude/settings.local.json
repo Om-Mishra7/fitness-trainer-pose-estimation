@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs wc:*)",
+      "Bash(grep:*)",
+      "Bash(grep -rn \"print\\(\" /c/Users/conta/Desktop/Como/fitness-trainer-pose-estimation/*.py)",
+      "Bash(python -c \"import mediapipe; print\\(mediapipe.__version__\\); import pkgutil; print\\([m.name for m in pkgutil.iter_modules\\(mediapipe.__path__\\)]\\)\")",
+      "Bash(python -c \"import mediapipe; import mediapipe.tasks; import mediapipe.tasks.python; import mediapipe.tasks.python.vision; print\\(dir\\(mediapipe.tasks.python.vision\\)\\)\")",
+      "Bash(python -c \"import mediapipe; print\\(dir\\(mediapipe\\)\\); import mediapipe.tasks as t; print\\(dir\\(t\\)\\)\")",
+      "Bash(python -c \"import mediapipe.tasks.vision as v; print\\(dir\\(v\\)\\)\")",
+      "Bash(python -c \"from mediapipe.tasks import vision; print\\(dir\\(vision\\)\\)\")",
+      "Bash(python -c \"import mediapipe.tasks as t; import mediapipe.tasks.vision as v; print\\(dir\\(v\\)\\)\")",
+      "Bash(python -c \"import pkgutil, mediapipe.tasks; [print\\(m.name\\) for m in pkgutil.iter_modules\\(mediapipe.tasks.__path__\\)]\")",
+      "Bash(python:*)",
+      "Bash(dir C:UserscontaAppDataLocalProgramsPythonPython313Libsite-packagesmediapipetasksvision)"
+    ]
+  }
+}

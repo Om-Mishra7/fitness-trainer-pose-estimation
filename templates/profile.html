@@ -13,7 +13,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>🏋️ Fitness Trainer</h1>
+            <h1>Fitness Trainer</h1>
             <p>Your Personal Workout Profile</p>
             <nav class="main-nav">
                 <ul>
@@ -32,35 +32,31 @@
                     <div class="avatar-circle" id="avatar-circle">
                         <span id="avatar-initials">{{ user.initials or 'FT' }}</span>
                     </div>
-                    <button class="change-avatar-btn" id="change-avatar-btn">📷</button>
+                    <button class="change-avatar-btn" id="change-avatar-btn">Change</button>
                 </div>
                 <div class="profile-info">
                     <h2 id="profile-name">{{ user.name or 'Fitness Enthusiast' }}</h2>
                     <p class="profile-title">{{ user.title or 'Amateur Athlete' }}</p>
                     <p class="member-since">Member since {{ user.joined or 'January 2026' }}</p>
                 </div>
-                <button class="edit-profile-btn" id="edit-profile-btn">✏️ Edit Profile</button>
+                <button class="edit-profile-btn" id="edit-profile-btn">Edit Profile</button>
             </div>
             
             <!-- Stats Overview -->
             <div class="profile-stats">
                 <div class="stat-box">
-                    <span class="stat-icon">🏆</span>
                     <span class="stat-number" id="total-workouts">{{ stats.total_workouts or 0 }}</span>
                     <span class="stat-label">Total Workouts</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-icon">💪</span>
                     <span class="stat-number" id="total-reps">{{ stats.total_reps or 0 }}</span>
                     <span class="stat-label">Total Reps</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-icon">⏱️</span>
                     <span class="stat-number" id="total-minutes">{{ stats.total_minutes or 0 }}</span>
                     <span class="stat-label">Minutes Trained</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-icon">🔥</span>
                     <span class="stat-number" id="current-streak">{{ stats.streak or 0 }}</span>
                     <span class="stat-label">Day Streak</span>
                 </div>
@@ -70,7 +66,7 @@
             <div class="profile-grid">
                 <!-- Personal Info Card -->
                 <div class="profile-card personal-info-card">
-                    <h3>📋 Personal Information</h3>
+                    <h3>Personal Information</h3>
                     <form id="personal-info-form">
                         <div class="form-group">
                             <label for="user-name">Full Name</label>
@@ -101,13 +97,13 @@
                                 <input type="number" id="user-weight" value="{{ user.weight or '' }}" placeholder="70" min="30" max="300">
                             </div>
                         </div>
-                        <button type="submit" class="save-btn">💾 Save Changes</button>
+                        <button type="submit" class="save-btn">Save Changes</button>
                     </form>
                 </div>
                 
                 <!-- Fitness Goals Card -->
                 <div class="profile-card goals-card">
-                    <h3>🎯 Fitness Goals</h3>
+                    <h3>Fitness Goals</h3>
                     <div class="goals-list">
                         <div class="goal-item">
                             <div class="goal-header">
@@ -138,36 +134,30 @@
                         </div>
                     </div>
                     <div class="set-goals">
-                        <button class="set-goals-btn" id="set-goals-btn">⚙️ Customize Goals</button>
+                        <button class="set-goals-btn" id="set-goals-btn">Customize Goals</button>
                     </div>
                 </div>
                 
                 <!-- Achievements Card -->
                 <div class="profile-card achievements-card">
-                    <h3>🏅 Achievements</h3>
+                    <h3>Achievements</h3>
                     <div class="achievements-grid">
                         <div class="achievement {{ 'unlocked' if stats.total_workouts >= 1 else 'locked' }}">
-                            <span class="achievement-icon">🌟</span>
                             <span class="achievement-name">First Workout</span>
                         </div>
                         <div class="achievement {{ 'unlocked' if stats.total_workouts >= 10 else 'locked' }}">
-                            <span class="achievement-icon">💪</span>
                             <span class="achievement-name">10 Workouts</span>
                         </div>
                         <div class="achievement {{ 'unlocked' if stats.streak >= 7 else 'locked' }}">
-                            <span class="achievement-icon">🔥</span>
                             <span class="achievement-name">7 Day Streak</span>
                         </div>
                         <div class="achievement {{ 'unlocked' if stats.total_reps >= 100 else 'locked' }}">
-                            <span class="achievement-icon">💯</span>
                             <span class="achievement-name">100 Reps Club</span>
                         </div>
                         <div class="achievement {{ 'unlocked' if stats.avg_form_score >= 90 else 'locked' }}">
-                            <span class="achievement-icon">🎯</span>
                             <span class="achievement-name">Perfect Form</span>
                         </div>
                         <div class="achievement {{ 'unlocked' if stats.total_workouts >= 50 else 'locked' }}">
-                            <span class="achievement-icon">🏆</span>
                             <span class="achievement-name">50 Workouts</span>
                         </div>
                     </div>
@@ -175,7 +165,7 @@
                 
                 <!-- Recent Activity Card -->
                 <div class="profile-card activity-card">
-                    <h3>📊 Recent Activity</h3>
+                    <h3>Recent Activity</h3>
                     <div class="activity-chart-container">
                         <canvas id="activityChart"></canvas>
                     </div>
@@ -183,7 +173,7 @@
                 
                 <!-- Favorite Exercises Card -->
                 <div class="profile-card favorites-card">
-                    <h3>❤️ Favorite Exercises</h3>
+                    <h3>Favorite Exercises</h3>
                     <div class="favorites-list" id="favorites-list">
                         {% if favorites %}
                             {% for fav in favorites %}
@@ -200,31 +190,31 @@
                 
                 <!-- Settings Card -->
                 <div class="profile-card settings-card">
-                    <h3>⚙️ Settings</h3>
+                    <h3>Settings</h3>
                     <div class="settings-list">
                         <div class="setting-item">
-                            <span class="setting-label">🔔 Notifications</span>
+                            <span class="setting-label">Notifications</span>
                             <label class="toggle">
                                 <input type="checkbox" id="notifications-toggle" {{ 'checked' if settings.notifications else '' }}>
                                 <span class="slider"></span>
                             </label>
                         </div>
                         <div class="setting-item">
-                            <span class="setting-label">🌙 Dark Mode</span>
+                            <span class="setting-label">Dark Mode</span>
                             <label class="toggle">
                                 <input type="checkbox" id="darkmode-toggle" {{ 'checked' if settings.dark_mode else '' }}>
                                 <span class="slider"></span>
                             </label>
                         </div>
                         <div class="setting-item">
-                            <span class="setting-label">🔊 Sound Effects</span>
+                            <span class="setting-label">Sound Effects</span>
                             <label class="toggle">
                                 <input type="checkbox" id="sound-toggle" {{ 'checked' if settings.sounds else '' }}>
                                 <span class="slider"></span>
                             </label>
                         </div>
                         <div class="setting-item">
-                            <span class="setting-label">📏 Units</span>
+                            <span class="setting-label">Units</span>
                             <select id="units-select" class="setting-select">
                                 <option value="metric" {{ 'selected' if settings.units == 'metric' else '' }}>Metric (kg/cm)</option>
                                 <option value="imperial" {{ 'selected' if settings.units == 'imperial' else '' }}>Imperial (lb/in)</option>

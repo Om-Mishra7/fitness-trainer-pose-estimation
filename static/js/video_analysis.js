@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function setTerminalStatus(status, type = 'idle') {
-        terminalStatus.textContent = `● ${status}`;
+        terminalStatus.textContent = status;
         terminalStatus.className = `terminal-status ${type}`;
     }
     
@@ -87,9 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Exercise type info
     const exerciseTypeInfo = {
-        'bilateral': { label: '↔️ Bilateral', color: '#9b59b6', class: 'bilateral' },
-        'duration': { label: '⏱️ Duration', color: '#e67e22', class: 'duration' },
-        'standard': { label: '🔄 Standard', color: '#3498db', class: 'standard' }
+        'bilateral': { label: 'Bilateral', color: '#9b59b6', class: 'bilateral' },
+        'duration': { label: 'Duration', color: '#e67e22', class: 'duration' },
+        'standard': { label: 'Standard', color: '#3498db', class: 'standard' }
     };
     
     // Load exercises
@@ -195,10 +195,10 @@ document.addEventListener('DOMContentLoaded', function() {
     playBtn.addEventListener('click', () => {
         if (videoPlayer.paused) {
             videoPlayer.play();
-            playBtn.textContent = '⏸️ Pause';
+            playBtn.textContent = 'Pause';
         } else {
             videoPlayer.pause();
-            playBtn.textContent = '▶️ Play';
+            playBtn.textContent = 'Play';
         }
     });
     
@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Terminal logs
         setTerminalStatus('Processing', 'running');
-        addLog('═══════════════════════════════════════════════', 'info');
+        addLog('---', 'info');
         addLog('Starting video analysis...', 'processing');
         addLog(`Exercise: ${exerciseSelect.options[exerciseSelect.selectedIndex].text}`, 'info');
         addLog(`Video: ${videoFile.name}`, 'info');
@@ -346,8 +346,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     progressText.textContent = '100%';
                     
                     // Terminal completion logs
-                    addLog('═══════════════════════════════════════════════', 'success');
-                    addLog('✓ Analysis completed successfully!', 'success');
+                    addLog('---', 'success');
+                    addLog('Analysis completed successfully.', 'success');
                     addLog(`Total Reps: ${data.reps || 0}`, 'success');
                     addLog(`Average Score: ${data.avg_form_score || data.form_score || '--'}/100`, 'success');
                     addLog(`Grade: ${data.grade || '--'}`, 'success');
@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         videoPlayer.play();
                         
                         addLog('Video with skeleton overlay loaded.', 'success');
-                        addFeedback('info', '🦴 Video with skeleton overlay is now playing');
+                        addFeedback('info', 'Video with skeleton overlay is now playing');
                     } else {
                         addFeedback('success', 'Analysis completed!');
                     }
@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                 } else if (data.status === 'error') {
                     clearInterval(analysisInterval);
-                    addLog(`✗ Analysis error: ${data.error}`, 'error');
+                    addLog(`Analysis error: ${data.error}`, 'error');
                     setTerminalStatus('Error', 'error');
                     addFeedback('error', `Analysis error: ${data.error}`);
                     stopAnalysis();
@@ -385,13 +385,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, 200);
         
-        // Also poll frame-by-frame for real-time display
-        requestAnimationFrame(function frameLoop() {
-            if (isAnalyzing && !videoPlayer.paused) {
-                sendFrameForAnalysis(videoId);
-                requestAnimationFrame(frameLoop);
-            }
-        });
+        // Frame-by-frame analysis is handled by the subprocess; no client-side polling needed.
     }
     
     async function sendFrameForAnalysis(videoId) {
